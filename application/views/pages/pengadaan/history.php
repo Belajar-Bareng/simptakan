@@ -29,6 +29,16 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+							<div class="form-group">
+								<br>
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+									<input type="text" data-date-index="1" class="form-control pull-right" id="table-search-daterange">
+								</div>
+								<!-- /.input group -->
+							</div>
               <table id="table1" class="table table-bordered table-striped">
                 <thead>
                     <tr>

@@ -210,6 +210,39 @@
         // new $.fn.dataTable.FixedHeader( table3 );
       }
 
+			if ($('#table-search-daterange').length) {
+				const tableSearchDateRange = $('#table-search-daterange');
+        tableSearchDateRange.daterangepicker();
+				
+				const dateIndex = parseInt(tableSearchDateRange.data('date-index') ?? 0);
+
+				tableSearchDateRange.on('apply.daterangepicker', function(ev, picker) {
+					$(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+					const startDate = new Date(picker.startDate.format('YYYY-MM-DD'));
+					const endDate = new Date(picker.endDate.format('YYYY-MM-DD'));
+
+					$.fn.dataTableExt.afnFiltering.push((setting, aData, index) => {
+						const column = aData[dateIndex];
+						const columnArray = column.split('/');
+						const date = new Date(columnArray[2], parseInt(columnArray[1]) - 1, columnArray[0]);
+
+						return ((isNaN(startDate) && isNaN(endDate)) || (isNaN(startDate) && date <= endDate) || (startDate <= date && isNaN(endDate)) || (startDate <= date && date <= endDate));
+					});
+
+					if ($('#table1').length) {
+						table1.draw();
+					}
+
+					if ($('#table2').length) {
+						table2.draw();
+					}
+
+					if ($('#table3').length) {
+						table3.draw();
+					}
+				});
+			}
+
       if ($('#reservation').length) {
         //Date range picker
         $('#reservation').daterangepicker()
