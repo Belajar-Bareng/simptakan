@@ -11,6 +11,12 @@ class Ebook_model extends MY_Model
 		$this->db->where('jumlah >', 0);
 		return $this->getAll();
 	}
+	
+	public function getAllNewBook()
+	{
+		$this->db->where('tanggal >= now() - interval 7 day');
+		return $this->getAll();
+	}
 
 	public function getLike($key)
 	{

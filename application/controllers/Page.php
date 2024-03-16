@@ -9,6 +9,7 @@ class Page extends CI_Controller
         parent::__construct();
 
         $this->load->model(Buku_model::class, 'buku');
+        $this->load->model(Ebook_model::class, 'ebook');
         $this->load->model(Siswa_model::class, 'siswa');
         $this->load->model(Peminjaman_model::class, 'minjam');
         $this->load->model(Pengunjung_model::class, 'kunjung');
@@ -34,6 +35,7 @@ class Page extends CI_Controller
     {
         if (!isLogin()) return redirect('/login');
         if (isJabatan('Anggota') or isJabatan('Pengunjung')) return redirect('katalog');
+
         $data = [
             'title' => 'Dashboard',
             'sidebar' => ['dashboard'],
@@ -44,7 +46,9 @@ class Page extends CI_Controller
                 'kunjung' => $this->kunjung->countToday(),
             ],
             'populer' => $this->peminjaman_detail->getPopular(),
-            'bukubaru' => $this->peminjaman_detail->getbukubaru()
+            'bukubaru' => $this->peminjaman_detail->getbukubaru(),
+			'new_book' => $this->buku->getAllNewBook(),
+			'new_ebook' => $this->ebook->getAllNewBook(),
         ];
 
         view('dashboard', $data);

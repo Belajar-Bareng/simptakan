@@ -145,6 +145,12 @@
         });
       }
 
+			if ($('#notification-container').length) {
+				$('#notification-container > span').on('click', function() {
+					$(this).parent('#notification-container').remove();
+				});
+			}
+
 
       if ($('#table1').length) {
         var table1 = $('#table1').DataTable({

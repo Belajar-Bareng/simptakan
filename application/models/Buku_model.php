@@ -12,6 +12,12 @@ class Buku_model extends MY_Model
 		return $this->getAll();
 	}
 
+	public function getAllNewBook()
+	{
+		$this->db->where('tanggal >= now() - interval 7 day');
+		return $this->getAllData();
+	}
+
 	public function getAllPopular()
 	{
 		$this->db->select(" count(*) as total");
