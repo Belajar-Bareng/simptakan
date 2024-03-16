@@ -63,12 +63,12 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($items as $item) : ?>
+            <?php foreach ($items as $index => $item) : ?>
               <tr>
                 <?php $pinjam = strtotime($item['tanggal_pinjam']); ?>
                 <?php $tenggat = strtotime($item['tanggal_tenggat']); ?>
                 <?php $kembali = strtotime($item['tanggal_kembali'] ?? time()); ?>
-                <td><?= $item['no_peminjaman']; ?></td>
+                <td><?= $index + 1; ?></td>
                 <td><?= $item['nama'] ?: '-'; ?></td>
                 <td><?= $item['judul'] ?: '-'; ?></td>
                 <?php if ($this->uri->uri_string() === 'laporan-buku-populer' or $this->uri->uri_string() === 'laporan-buku-cetak') : ?>
