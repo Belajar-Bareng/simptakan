@@ -26,7 +26,7 @@
 			</div>
 			<table class="table table-bordered table-striped">
 				<thead>
-					<th style="width: 20px;">Nomor</th>
+					<th style="width: 20px;">No.</th>
 					<th>Judul</th>
 					<th>Total Peminjaman</th>
 				</thead>

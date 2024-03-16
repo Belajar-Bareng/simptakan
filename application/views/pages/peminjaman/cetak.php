@@ -24,7 +24,7 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th style="width: 20px;">Nomor</th>
+              <th style="width: 20px;">No.</th>
               <th>Peminjam</th>
               <th>Judul Buku</th>
               <?php if ($this->uri->uri_string() === 'laporan-buku-populer' or $this->uri->uri_string() === 'laporan-buku-cetak') : ?>
