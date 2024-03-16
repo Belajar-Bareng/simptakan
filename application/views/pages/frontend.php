@@ -17,6 +17,13 @@
 			.notification {
 				padding: 15px 100px;
 				text-align: center;
+				background-color: #FFC800;
+				color: white;
+				line-height: 1;
+			}
+
+			.notification a {
+				color: white;
 			}
 		</style>
     </head>
@@ -51,7 +58,7 @@
         </header>
 		<?php if(count($new) > 0): ?>
 		<div class="notification">
-			<p>Hore! Kami punya <?= join(' dan ', $new) ?> lho. Yuk lihat katalognya</p>
+			<p>Hore! Kami punya <?= join(' dan ', $new) ?> lho. Yuk lihat <a href="<?= base_url('katalog') ?>">katalognya</a>.</p>
 		</div>
 		<?php endif ?>
         <?php if($buku): ?>

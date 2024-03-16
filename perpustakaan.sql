@@ -560,7 +560,7 @@ INSERT INTO `pengadaan_detail` (`id_pengadaan_detail`, `id_pengadaan`, `id_buku`
 --
 
 CREATE TABLE `pengunjung` (
-  `id_pengunjung` int(11) NOT NULL,
+  `id_pengunjung` int(11) NOT NULL AUTO_INCREMENT,
   `tanggal` timestamp NULL DEFAULT current_timestamp(),
   `nis` varchar(15) DEFAULT NULL,
   `nama` varchar(50) DEFAULT NULL,
