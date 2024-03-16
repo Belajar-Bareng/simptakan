@@ -73,7 +73,7 @@
 
 	let number = 0;
 
-	new Chart("popularChart", {
+	const reportChart = new Chart("popularChart", {
 		type: "bar",
 		data: {
 			labels: xValues,
@@ -87,7 +87,11 @@
 		options: {
 			scales: {
 				y: {
-					beginAtZero: true
+					beginAtZero: true,
+					title: {
+						display: true,
+						text: 'Total Peminjaman'
+					},
 				},
 				x: {
 					ticks: {
@@ -97,6 +101,10 @@
 							// return 'eh';
 							// return value.substr(0, 10);//truncate
 						},
+					},
+					title: {
+						display: true,
+						text: 'Nomor Urut Buku'
 					}
 				},
 			}

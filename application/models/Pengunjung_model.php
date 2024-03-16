@@ -12,6 +12,12 @@ class Pengunjung_model extends MY_Model
 		return $this->count();
 	}
 
+	public function getAllOrdered()
+	{
+		$this->db->order_by('tanggal', 'ASC');
+		return $this->getAll();
+	}
+
 	public function getAllToday()
 	{
 		$this->db->where('DATE(pengunjung.tanggal)=CURDATE()');

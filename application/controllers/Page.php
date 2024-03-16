@@ -57,7 +57,28 @@ class Page extends CI_Controller
             'title' => 'Laporan Peminjaman',
             'sidebar' => ['peminjaman'],
             'items' => $this->peminjaman_detail->getAllDetail(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal_pinjam']));
+			if(isset($map[$date])) {
+				$map[$date]++;
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = 1;
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('peminjaman/history', $data);
     }
@@ -66,7 +87,7 @@ class Page extends CI_Controller
     {
         if (!isLogin()) return redirect('/login');
         $data = [
-            'title' => 'Laporan Peminjaman',
+            'title' => 'Laporan Peminjaman Hari Ini',
             'sidebar' => ['peminjaman'],
             'items' => $this->peminjaman_detail->getAllDetailToday(),
         ];
@@ -94,7 +115,29 @@ class Page extends CI_Controller
             'title' => 'Laporan Pengadaan',
             'sidebar' => ['pengadaan'],
             'items' => $this->pengadaan_detail->getAllDetail(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal']));
+			if(isset($map[$date])) {
+				$map[$date] += (int) $item['jumlah'];
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = (int) $item['jumlah'];
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('pengadaan/history', $data);
     }
@@ -106,7 +149,29 @@ class Page extends CI_Controller
             'title' => 'Laporan Pengeluaran',
             'sidebar' => ['pengeluaran'],
             'items' => $this->pengeluaran->getAllDetail(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal']));
+			if(isset($map[$date])) {
+				$map[$date] += (int) $item['jumlah'];
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = (int) $item['jumlah'];
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('pengeluaran/history', $data);
     }
@@ -117,8 +182,29 @@ class Page extends CI_Controller
         $data = [
             'title' => 'Laporan Kunjungan',
             'sidebar' => ['pengunjung'],
-            'items' => $this->pengunjung->getAll(),
+            'items' => $this->pengunjung->getAllOrdered(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal']));
+			if(isset($map[$date])) {
+				$map[$date]++;
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = 1;
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('pengunjung/index', $data);
     }

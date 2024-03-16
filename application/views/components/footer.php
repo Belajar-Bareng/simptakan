@@ -182,6 +182,15 @@
 									doc.content[0].text = title;
 									doc.content[0].bold = true;
 
+									if (typeof reportChart !== 'undefined') {
+										doc.content.splice(1, 0, {
+											margin: [0, 25, 0, 25],
+											image: reportChart.toBase64Image(),
+											width: 750,
+											alignment: 'center',
+										});
+									}
+
 									doc.content.unshift({
 										columns: [
 											{
@@ -255,6 +264,55 @@
         // new $.fn.dataTable.FixedHeader( table3 );
       }
 
+			if (typeof reportChart !== 'undefined') {
+				$('.report-toggle').on('click', function(e) {
+					$('.report-toggle').removeClass('btn-primary');
+					this.classList.add('btn-primary');
+					console.log(this.dataset.type);
+
+					let highestYHere = 0;
+
+					switch (this.dataset.type) {
+						case 'daily':
+							reportChart.data.datasets[0].data = yValues;
+							reportChart.data.labels = xValues;
+							highestYHere = highestY;
+							break;
+					
+						default:
+							reportChart.data.datasets[0].data = [];
+							reportChart.data.labels = [];
+
+							const months = [];
+							const mapping = {};
+							for (let i = 0; i < xValues.length; i++) {
+								const label = xValues[i].slice(this.dataset.type === 'monthly' ? -7 : -4);
+								if (mapping[label] === undefined) {
+									mapping[label] = yValues[i];
+									months.push(label);
+								} else {
+									mapping[label] += yValues[i];
+								}
+							}
+
+							for (let i = 0; i < months.length; i++) {
+								const valueY = mapping[months[i]];
+								reportChart.data.datasets[0].data.push(valueY);
+								reportChart.data.labels.push(months[i]);
+
+								if (highestYHere < valueY) {
+									highestYHere = valueY;
+								}
+							}
+							break;
+					}
+
+					reportChart.type = reportChart.data.labels.length < 5 ? 'bar': 'line';
+					reportChart.options.scales.y.max = highestYHere + 10;
+					reportChart.update();
+				});
+			}
+
 			if ($('#table-search-daterange').length) {
 				const tableSearchDateRange = $('#table-search-daterange');
         tableSearchDateRange.daterangepicker();
@@ -266,11 +324,13 @@
 					const startDate = new Date(picker.startDate.format('YYYY-MM-DD'));
 					const endDate = new Date(picker.endDate.format('YYYY-MM-DD'));
 
-					$.fn.dataTableExt.afnFiltering.push((setting, aData, index) => {
-						const column = aData[dateIndex];
+					const convertDate = (column) => {
 						const columnArray = column.split('/');
-						const date = new Date(columnArray[2], parseInt(columnArray[1]) - 1, columnArray[0]);
+						return new Date(columnArray[2], parseInt(columnArray[1]) - 1, columnArray[0]);
+					}
 
+					$.fn.dataTableExt.afnFiltering.push((setting, aData, index) => {
+						const date = convertDate(aData[dateIndex]);
 						return ((isNaN(startDate) && isNaN(endDate)) || (isNaN(startDate) && date <= endDate) || (startDate <= date && isNaN(endDate)) || (startDate <= date && date <= endDate));
 					});
 
@@ -285,75 +345,22 @@
 					if ($('#table3').length) {
 						table3.draw();
 					}
+
+					if (typeof reportChart !== 'undefined') {
+						reportChart.data.datasets[0].data = [];
+						reportChart.data.labels = [];
+						for (let i = 0; i < xValues.length; i++) {
+							const date = convertDate(xValues[i]);
+							if ((isNaN(startDate) && isNaN(endDate)) || (isNaN(startDate) && date <= endDate) || (startDate <= date && isNaN(endDate)) || (startDate <= date && date <= endDate)) {
+								reportChart.data.datasets[0].data.push(yValues[i]);
+								reportChart.data.labels.push(xValues[i]);
+							}
+						}
+						reportChart.type = reportChart.data.labels.length < 5 ? 'bar': 'line';
+						reportChart.update();
+					}
 				});
 			}
-
-      if ($('#reservation').length) {
-        //Date range picker
-        $('#reservation').daterangepicker()
-        //Date range picker with time picker
-        $('#reservationtime').daterangepicker({
-          timePicker: true,
-          timePickerIncrement: 30,
-          locale: {
-            format: 'MM/DD/YYYY hh:mm A'
-          }
-        })
-        //Date range as a button
-        $('#daterange-btn').daterangepicker({
-            ranges: {
-              'Today': [moment(), moment()],
-              'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-              'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-              'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-              'This Month': [moment().startOf('month'), moment().endOf('month')],
-              'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
-            startDate: moment().subtract(29, 'days'),
-            endDate: moment()
-          },
-          function(start, end) {
-            $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-          }
-        )
-        //fungsi untuk filtering data berdasarkan tanggal 
-        var start_date;
-        var end_date;
-        var DateFilterFunction = (function(oSettings, aData, iDataIndex) {
-          var dateStart = parseDateValue(start_date);
-          var dateEnd = parseDateValue(end_date);
-          //Kolom tanggal yang akan kita gunakan berada dalam urutan 2, karena dihitung mulai dari 0
-          //nama depan = 0
-          //nama belakang = 1
-          //tanggal terdaftar =2
-          var evalDate = parseDateValue(aData[3]);
-          if ((isNaN(dateStart) && isNaN(dateEnd)) ||
-            (isNaN(dateStart) && evalDate <= dateEnd) ||
-            (dateStart <= evalDate && isNaN(dateEnd)) ||
-            (dateStart <= evalDate && evalDate <= dateEnd)) {
-            return true;
-          }
-          return false;
-        });
-
-        // fungsi untuk converting format tanggal dd/mm/yyyy menjadi format tanggal javascript menggunakan zona aktubrowser
-        function parseDateValue(rawDate) {
-          var dateArray = rawDate.split("/");
-          var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[0]); // -1 because months are from 0 to 11   
-          return parsedDate;
-        }
-
-        $('#reservation').on('apply.daterangepicker', function(ev, picker) {
-          $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-          start_date = picker.startDate.format('DD/MM/YYYY');
-          end_date = picker.endDate.format('DD/MM/YYYY');
-          //  alert(start_date + " sampai " + end_date);
-          $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
-          //  console.log(table1);
-          table1.draw();
-        });
-
-      }
 
       <?php if (isset($populer)) : ?>
         if ($('#populerChart').length) {
