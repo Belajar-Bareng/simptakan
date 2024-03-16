@@ -80,7 +80,7 @@ class Page extends CI_Controller
         $data = [
             'title' => 'Laporan Peminjaman',
             'sidebar' => ['peminjaman'],
-            'items' => $this->peminjaman_detail->getAllDetailLimitCount(),
+            'items' => $this->peminjaman_detail->getAllDetail(),
             'buku_populer' => $this->peminjaman_detail->getPopularLimit(),
         ];
 
@@ -164,12 +164,12 @@ class Page extends CI_Controller
     public function buku_populer()
     {
         $data = [
-            'title' => 'Riwayat Peminjaman',
-            'sidebar' => ['peminjaman'],
-            'items' => $this->peminjaman_detail->getAllDetailLimitCount(),
-            'buku_populer' => $this->peminjaman_detail->getPopularLimit(),
+            'title' => 'Buku Terpopuler',
+            'sidebar' => ['buku-populer'],
+            'items' => $this->peminjaman_detail->getAllDetail(),
+			'popular' => $this->peminjaman_detail->getPopular(),
         ];
 
-        view('peminjaman/history', $data);
+        view('peminjaman/popular', $data);
     }
 }

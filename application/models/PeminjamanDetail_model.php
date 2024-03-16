@@ -69,9 +69,9 @@ class PeminjamanDetail_model extends MY_Model
 
 	public function getPopular()
 	{
-		$this->db->select("count(*) as total");
+		$this->db->select("buku.judul as judul, count(*) as total");
 		$this->db->join('buku', 'buku.id_buku=peminjaman_detail.id_buku');
-		$this->db->group_by('buku.id_buku');
+		$this->db->group_by('buku.id_buku, buku.judul');
 		$this->db->order_by('total', 'DESC');
 		return $this->db->get($this->table)->result_array();
 	}
