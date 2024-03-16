@@ -27,7 +27,19 @@ class Page extends CI_Controller
         $data = [
             'buku' => $this->buku->getAllPopular(),
             'petugas' => $this->petugas->getAll(),
+			'new' => [],
         ];
+
+		$count_new_book = count($this->buku->getAllNewBook());
+		if ($count_new_book > 0) {
+			array_push($data['new'], $count_new_book . ' buku baru');
+		}
+
+		$count_new_ebook = count($this->ebook->getAllNewBook());
+		if ($count_new_ebook > 0) {
+			array_push($data['new'], $count_new_ebook . ' ebook baru');
+		}
+
         $this->load->view('pages/frontend', $data);
     }
 
