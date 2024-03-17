@@ -75,6 +75,8 @@
       table1.buttons().container().appendTo( '#table1_wrapper .col-sm-6:eq(0)' );
   });
 
+		$('.select2').select2();
+
     if ($('#tenggatModal').length) {
       $('.btn-ubah-tenggat').click(function() {
         const no_peminjaman = $(this).data('id');
