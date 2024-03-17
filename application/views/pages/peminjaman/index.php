@@ -132,7 +132,7 @@
         <table id="table1" class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th style="width: 20px;">Nomor</th>
+              <th style="width: 20px;">No.</th>
               <th>Peminjam</th>
               <th>Judul Buku</th>
               <th>Dipinjam</th>

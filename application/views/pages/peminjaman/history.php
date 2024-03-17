@@ -19,6 +19,15 @@
     <?php endif; ?>
 
     <div class="box box-primary">
+			<div class="chart box-body">
+				<div class="">
+					<button class="btn btn-xs report-toggle btn-primary" data-type='daily'>Harian</button>
+					<button class="btn btn-xs report-toggle" data-type='monthly'>Bulanan</button>
+					<button class="btn btn-xs report-toggle" data-type='annual'>Tahunan</button>
+				</div>
+
+				<canvas id="reportChart" data-json='<?= json_encode($chart) ?>' style="height:300px; width: 100%"></canvas>
+			</div>
       <div class="box-header">
         <h3 class="box-title">
           <?php if (isJabatan('Petugas')) : ?>
@@ -35,7 +44,7 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input type="text" class="form-control pull-right" id="reservation">
+              <input type="text" data-date-index="<?= in_array($this->uri->uri_string(), ['laporan-buku-populer', 'laporan-buku-cetak']) ? 4: 3; ?>" class="form-control pull-right" id="table-search-daterange">
             </div>
             <!-- /.input group -->
           </div>
@@ -46,7 +55,7 @@
         <table id="table1" class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th style="width: 20px;">Nomor</th>
+              <th style="width: 20px;">No.</th>
               <th>Peminjam</th>
               <th>Judul Buku</th>
               <?php if ($this->uri->uri_string() === 'laporan-buku-populer' or $this->uri->uri_string() === 'laporan-buku-cetak') : ?>
@@ -63,12 +72,12 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($items as $item) : ?>
+            <?php foreach ($items as $index => $item) : ?>
               <tr>
                 <?php $pinjam = strtotime($item['tanggal_pinjam']); ?>
                 <?php $tenggat = strtotime($item['tanggal_tenggat']); ?>
                 <?php $kembali = strtotime($item['tanggal_kembali'] ?? time()); ?>
-                <td><?= $item['no_peminjaman']; ?></td>
+                <td><?= $index + 1; ?></td>
                 <td><?= $item['nama'] ?: '-'; ?></td>
                 <td><?= $item['judul'] ?: '-'; ?></td>
                 <?php if ($this->uri->uri_string() === 'laporan-buku-populer' or $this->uri->uri_string() === 'laporan-buku-cetak') : ?>
@@ -105,3 +114,61 @@
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+	const reportChartData = JSON.parse(document.getElementById('reportChart').dataset.json);
+
+	const xValues = [];
+	const yValues = [];
+	const colors = [];
+
+	let highestY = 0;
+
+	for(let i = 0; i < reportChartData.length; i++) {
+		const valueY = parseInt(reportChartData[i]['total'])
+		yValues.push(valueY);
+		if (highestY < valueY) {
+			highestY = valueY;
+		}
+
+		xValues.push(reportChartData[i]['date']);
+		colors.push('#' + Math.floor(Math.random()*16777215).toString(16));
+	}
+
+	const reportChart = new Chart("reportChart", {
+		type: xValues.length < 5 ? "bar" : "line",
+		data: {
+			labels: xValues,
+			datasets: [{
+				label: '# jumlah peminjaman',
+				data: yValues,
+				backgroundColor: colors,
+				fill: false,
+				borderColor: 'rgb(75, 192, 192)',
+				tension: 0.1
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true,
+					title: {
+						display: true,
+						text: 'Jumlah Peminjaman'
+					},
+        	max: highestY + 10,
+				},
+				x: {
+					ticks: {
+						stepSize: 1,
+					},
+					title: {
+						display: true,
+						text: 'Tanggal'
+					}
+				},
+			}
+		}
+	});
+</script>

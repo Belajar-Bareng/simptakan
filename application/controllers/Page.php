@@ -9,6 +9,7 @@ class Page extends CI_Controller
         parent::__construct();
 
         $this->load->model(Buku_model::class, 'buku');
+        $this->load->model(Ebook_model::class, 'ebook');
         $this->load->model(Siswa_model::class, 'siswa');
         $this->load->model(Peminjaman_model::class, 'minjam');
         $this->load->model(Pengunjung_model::class, 'kunjung');
@@ -26,7 +27,19 @@ class Page extends CI_Controller
         $data = [
             'buku' => $this->buku->getAllPopular(),
             'petugas' => $this->petugas->getAll(),
+			'new' => [],
         ];
+
+		$count_new_book = count($this->buku->getAllNewBook());
+		if ($count_new_book > 0) {
+			array_push($data['new'], $count_new_book . ' buku baru');
+		}
+
+		$count_new_ebook = count($this->ebook->getAllNewBook());
+		if ($count_new_ebook > 0) {
+			array_push($data['new'], $count_new_ebook . ' ebook baru');
+		}
+
         $this->load->view('pages/frontend', $data);
     }
 
@@ -34,6 +47,7 @@ class Page extends CI_Controller
     {
         if (!isLogin()) return redirect('/login');
         if (isJabatan('Anggota') or isJabatan('Pengunjung')) return redirect('katalog');
+
         $data = [
             'title' => 'Dashboard',
             'sidebar' => ['dashboard'],
@@ -44,7 +58,9 @@ class Page extends CI_Controller
                 'kunjung' => $this->kunjung->countToday(),
             ],
             'populer' => $this->peminjaman_detail->getPopular(),
-            'bukubaru' => $this->peminjaman_detail->getbukubaru()
+            'bukubaru' => $this->peminjaman_detail->getbukubaru(),
+			'new_book' => $this->buku->getAllNewBook(),
+			'new_ebook' => $this->ebook->getAllNewBook(),
         ];
 
         view('dashboard', $data);
@@ -57,7 +73,28 @@ class Page extends CI_Controller
             'title' => 'Laporan Peminjaman',
             'sidebar' => ['peminjaman'],
             'items' => $this->peminjaman_detail->getAllDetail(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal_pinjam']));
+			if(isset($map[$date])) {
+				$map[$date]++;
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = 1;
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('peminjaman/history', $data);
     }
@@ -66,7 +103,7 @@ class Page extends CI_Controller
     {
         if (!isLogin()) return redirect('/login');
         $data = [
-            'title' => 'Laporan Peminjaman',
+            'title' => 'Laporan Peminjaman Hari Ini',
             'sidebar' => ['peminjaman'],
             'items' => $this->peminjaman_detail->getAllDetailToday(),
         ];
@@ -80,7 +117,7 @@ class Page extends CI_Controller
         $data = [
             'title' => 'Laporan Peminjaman',
             'sidebar' => ['peminjaman'],
-            'items' => $this->peminjaman_detail->getAllDetailLimitCount(),
+            'items' => $this->peminjaman_detail->getAllDetail(),
             'buku_populer' => $this->peminjaman_detail->getPopularLimit(),
         ];
 
@@ -94,7 +131,29 @@ class Page extends CI_Controller
             'title' => 'Laporan Pengadaan',
             'sidebar' => ['pengadaan'],
             'items' => $this->pengadaan_detail->getAllDetail(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal']));
+			if(isset($map[$date])) {
+				$map[$date] += (int) $item['jumlah'];
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = (int) $item['jumlah'];
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('pengadaan/history', $data);
     }
@@ -106,7 +165,29 @@ class Page extends CI_Controller
             'title' => 'Laporan Pengeluaran',
             'sidebar' => ['pengeluaran'],
             'items' => $this->pengeluaran->getAllDetail(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal']));
+			if(isset($map[$date])) {
+				$map[$date] += (int) $item['jumlah'];
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = (int) $item['jumlah'];
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('pengeluaran/history', $data);
     }
@@ -117,8 +198,29 @@ class Page extends CI_Controller
         $data = [
             'title' => 'Laporan Kunjungan',
             'sidebar' => ['pengunjung'],
-            'items' => $this->pengunjung->getAll(),
+            'items' => $this->pengunjung->getAllOrdered(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal']));
+			if(isset($map[$date])) {
+				$map[$date]++;
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = 1;
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('pengunjung/index', $data);
     }
@@ -164,12 +266,12 @@ class Page extends CI_Controller
     public function buku_populer()
     {
         $data = [
-            'title' => 'Riwayat Peminjaman',
-            'sidebar' => ['peminjaman'],
-            'items' => $this->peminjaman_detail->getAllDetailLimitCount(),
-            'buku_populer' => $this->peminjaman_detail->getPopularLimit(),
+            'title' => 'Buku Terpopuler',
+            'sidebar' => ['buku-populer'],
+            'items' => $this->peminjaman_detail->getAllDetail(),
+			'popular' => $this->peminjaman_detail->getPopular(),
         ];
 
-        view('peminjaman/history', $data);
+        view('peminjaman/popular', $data);
     }
 }

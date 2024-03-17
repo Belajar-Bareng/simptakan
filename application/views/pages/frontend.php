@@ -13,6 +13,19 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="<?= asset('frontend/css/styles.css') ?>" rel="stylesheet" />
+		<style>
+			.notification {
+				padding: 15px 100px;
+				text-align: center;
+				background-color: #FFC800;
+				color: white;
+				line-height: 1;
+			}
+
+			.notification a {
+				color: white;
+			}
+		</style>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -34,6 +47,7 @@
                 </div>
             </div>
         </nav>
+		
         <!-- Masthead-->
         <header class="masthead">
             <div class="container">
@@ -42,6 +56,11 @@
                 <a class="btn btn-warning btn-xl text-uppercase " href="<?= site_url('login') ?>">Login</a>
             </div>
         </header>
+		<?php if(count($new) > 0): ?>
+		<div class="notification">
+			<p>Hore! Kami punya <?= join(' dan ', $new) ?> lho. Yuk lihat <a href="<?= base_url('katalog') ?>">katalognya</a>.</p>
+		</div>
+		<?php endif ?>
         <?php if($buku): ?>
         <!-- Buku Populer Grid-->
         <section class="page-section bg-light" id="Buku_Populer">

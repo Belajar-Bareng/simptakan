@@ -22,7 +22,7 @@ class Buku extends CI_Controller
         $data = [
             'title' => 'Buku',
             'sidebar' => ['buku'],
-            'items' => $this->buku->getAllData(),
+            'items' => $this->input->get('new', TRUE) ? $this->buku->getAllNewBook() : $this->buku->getAllData(),
         ];
         view('buku/index', $data);
     }

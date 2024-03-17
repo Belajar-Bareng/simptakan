@@ -26,9 +26,10 @@ class Katalog extends CI_Controller
             'title' => 'Katalog Buku',
             'sidebar' => ['buku'],
             'items' => isset($_GET['q']) ? $this->buku->getAllDataLike($_GET['q']) : $this->buku->getAllData(),
+			'segment' => 'katalog',
         ];
-        // view('buku/index', $data);
-        guestView('katalog/index', $data);
+
+        guestView('katalog/catalogue', $data);
     }
 
     public function show($id)
@@ -116,9 +117,10 @@ class Katalog extends CI_Controller
             'title' => 'Katalog E-Book',
             'sidebar' => ['ebook'],
             'items' => isset($_GET['q']) ? $this->ebook->getLike($_GET['q']) : $this->ebook->getAll(),
+			'segment' => 'katalog-ebook',
         ];
         // view('buku/index', $data);
-        guestView('katalog/index', $data);
+        guestView('katalog/catalogue', $data);
     }
 
     public function show_ebook($id)

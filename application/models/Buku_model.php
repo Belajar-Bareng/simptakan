@@ -6,10 +6,21 @@ class Buku_model extends MY_Model
 	protected $table = 'buku';
 	protected $id = 'id_buku';
 
+	public function getAllWithCondition() {
+		$this->db->select('*, IF(tanggal >= now() - interval 7 day, 1, 0) as baru');
+		return $this->getAll();
+	}
+
 	public function getAllAvailable()
 	{
 		$this->db->where('jumlah >', 0);
 		return $this->getAll();
+	}
+
+	public function getAllNewBook()
+	{
+		$this->db->where('tanggal >= now() - interval 7 day');
+		return $this->getAllData();
 	}
 
 	public function getAllPopular()
@@ -39,7 +50,7 @@ class Buku_model extends MY_Model
 
 	public function getAllData()
 	{
-		$this->db->select("{$this->table}.*, rak.rak as rak, penerbit.penerbit, kategori.kategori, klasifikasi.klasifikasi ");
+		$this->db->select("{$this->table}.*, rak.rak as rak, penerbit.penerbit, kategori.kategori, klasifikasi.klasifikasi, IF(buku.tanggal >= now() - interval 7 day, 1, 0) as baru ");
 		$this->db->join('rak', 'buku.id_rak=rak.id_rak');
 		$this->db->join('kategori', 'buku.id_kategori=kategori.id_kategori');
 		$this->db->join('penerbit', 'buku.id_penerbit=penerbit.id_penerbit');

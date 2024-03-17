@@ -14,7 +14,7 @@ class Ebook extends CI_Controller {
         $data = [
             'title' => 'Ebook',
             'sidebar' => ['ebook'],
-            'items' => $this->ebook->getAll(),
+            'items' => $this->input->get('new', TRUE) ? $this->ebook->getAllNewBook() : $this->ebook->getAll(),
         ];
 		view('ebook/index', $data);
 	}

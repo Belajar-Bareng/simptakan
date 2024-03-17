@@ -24,7 +24,7 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th style="width: 20px;">Nomor</th>
+              <th style="width: 20px;">No.</th>
               <th>Peminjam</th>
               <th>Judul Buku</th>
               <?php if ($this->uri->uri_string() === 'laporan-buku-populer' or $this->uri->uri_string() === 'laporan-buku-cetak') : ?>
@@ -50,7 +50,7 @@
                 <td><?= $item['nama'] ?: '-'; ?></td>
                 <td><?= $item['judul'] ?: '-'; ?></td>
                 <?php if ($this->uri->uri_string() === 'laporan-buku-populer' or $this->uri->uri_string() === 'laporan-buku-cetak') : ?>
-                  <td><?= $item['total'] ?: '-'; ?></td>
+                  <td><?= $item['total'] ?? '1'; ?></td>
                 <?php endif; ?>
                 <td><?= date('d/m/Y', $pinjam); ?></td>
                 <td><?= date('d/m/Y', $tenggat); ?></td>

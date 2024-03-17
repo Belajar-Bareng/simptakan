@@ -1,6 +1,18 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+		<?php if(count($new_book) > 0): ?>
+			<div id="notification-container" style="padding: 20px 30px; background: rgb(243, 156, 18); z-index: 999999; font-size: 16px; font-weight: 600; color: white">
+				<span class="float-right" href="#" data-toggle="tooltip" data-placement="left" title="Tutup!" style="color: rgb(255, 255, 255); font-size: 20px; margin-right: 10px;cursor:pointer;">×</span>
+				Ada buku baru lho! Silakan klik <a href="<?= base_url('buku') . '?new=true' ?>" style="text-decoration: underline; color: white;">di sini</a> untuk melihatnya.
+			</div>
+		<?php endif; ?>
+		<?php if(count($new_ebook) > 0): ?>
+			<div id="notification-container" style="padding: 20px 30px; background: rgb(243, 156, 18); z-index: 999999; font-size: 16px; font-weight: 600; color: white">
+				<span class="float-right" href="#" data-toggle="tooltip" data-placement="left" title="Tutup!" style="color: rgb(255, 255, 255); font-size: 20px; margin-right: 10px;cursor:pointer;">×</span>
+				Ada ebook baru lho! Silakan klik <a href="<?= base_url('ebook') . '?new=true' ?>" style="text-decoration: underline; color: white;">di sini</a> untuk melihatnya.
+			</div>
+		<?php endif; ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
