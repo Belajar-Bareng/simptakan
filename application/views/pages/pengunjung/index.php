@@ -28,14 +28,6 @@
 
 				<canvas id="reportChart" data-json='<?= json_encode($chart) ?>' style="height:300px; width: 100%"></canvas>
 			</div>
-      <div class="box-header">
-        <h3 class="box-title">
-          <a href="<?= base_url('laporan-pengunjung-hari-ini'); ?>" class="btn btn-primary">Hari ini</a>
-          <a href="<?= base_url('laporan-pengunjung'); ?>" class="btn btn-success">Semua</a>
-          <a href="<?= base_url('laporan-pengunjung-terbanyak'); ?>" class="btn btn-warning">Grafik</a>
-          <a href="<?= base_url('laporan-pengunjung-cetak'); ?>" class="btn btn-danger">Cetak</a>
-        </h3>
-      </div>
       <!-- /.box-header -->
       <div class="box-body">
 				<div class="form-group">

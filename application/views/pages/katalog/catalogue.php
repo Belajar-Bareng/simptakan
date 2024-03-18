@@ -55,15 +55,15 @@
 			return isbnNumber.slice(0, 3) + '-' + isbnNumber.slice(3, 6) + '-' + isbnNumber.slice(6, 11) + '-' + isbnNumber.slice(11, 12) + '-' + isbnNumber.slice(12);
 		}
 
-		let template = `<div class="col-lg-3">
+		let template = `<div class="col-lg-3 col-md-6 col-sm-6">
 							<div class="box box-widget widget-user">
 								<div class="widget-user-header bg-black" style="background: url('` + image + `') center center; height: 250px;">
 								</div>
 								<div class="box-footer no-padding">
 									<ul class="nav nav-stacked">
 										<li><a href="` + link + `">` + (book.isbn ? isbn(book.isbn) : '-') + ` <span class="pull-right badge bg-red">ISBN</span></a></li>
-										<li><a href="` + link + `">` + book.judul + ` <span class="pull-right badge bg-blue">Judul</span></a></li>
-										<li><a href="` + link + `">Oleh: ` + (book.pengarang ?? '-') + `</a></li>`;
+										<li><a href="` + link + `" class="only-one-line" title="`+ book.judul +`">` + book.judul + `</a></li>
+										<li><a href="` + link + `" class="only-one-line" title="`+ (book.pengarang ?? '-') +`">Oleh: ` + (book.pengarang ?? '-') + `</a></li>`;
 										
 		if (!segment.includes('ebook')) {
 			template += `<li><a href="` + link + `"><span class="badge bg-green">` + (book.jumlah > 0 ? 'Tersedia' : 'Tidak Tersedia') + `</span></a></li>`;
