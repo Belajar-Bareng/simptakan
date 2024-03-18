@@ -30,14 +30,6 @@
 			</div>
       <div class="box-header">
         <h3 class="box-title">
-          <?php if (isJabatan('Petugas')) : ?>
-            <a href="<?= base_url('peminjaman'); ?>" class="btn btn-default">Kembali</a>
-          <?php else : ?>
-            <a href="<?= base_url('laporan-peminjaman-hari-ini'); ?>" class="btn btn-primary">Hari ini</a>
-            <a href="<?= base_url('laporan-peminjaman'); ?>" class="btn btn-success">Semua</a>
-            <a href="<?= base_url('laporan-buku-populer'); ?>" class="btn btn-warning">Grafik</a>
-            <a href="<?= base_url('laporan-buku-cetak'); ?>" class="btn btn-danger">Cetak</a>
-          <?php endif; ?>
           <div class="form-group">
             <br>
             <div class="input-group">
