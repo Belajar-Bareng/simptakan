@@ -51,7 +51,7 @@
         <!-- Masthead-->
         <header class="masthead">
             <div class="container">
-                <div class="masthead-subheading">Selamat Datang</div>
+                <div class="masthead-subheading">Welcome</div>
                 <div class="masthead-heading text-uppercase">Perpustakan SMA Negeri 13 Banjarmasin</div>
                 <a class="btn btn-warning btn-xl text-uppercase " href="<?= site_url('login') ?>">Login</a>
             </div>
