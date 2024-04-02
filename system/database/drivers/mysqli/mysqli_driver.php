@@ -121,7 +121,7 @@ class CI_DB_mysqli_driver extends CI_DB
 		// Do we have a socket path?
 		if ($this->hostname[0] === '/') {
 			$hostname = NULL;
-			$port = 3307;
+			$port = 3306;
 			$socket = $this->hostname;
 		} else {
 			$hostname = ($persistent === TRUE)
@@ -191,7 +191,7 @@ class CI_DB_mysqli_driver extends CI_DB
 			}
 		}
 
-		if ($this->_mysqli->real_connect($hostname, $this->username, $this->password, $this->database, 3307, $socket, $client_flags)) {
+		if ($this->_mysqli->real_connect($hostname, $this->username, $this->password, $this->database, 3306, $socket, $client_flags)) {
 			// Prior to version 5.7.3, MySQL silently downgrades to an unencrypted connection if SSL setup fails
 			if (
 				($client_flags & MYSQLI_CLIENT_SSL)
