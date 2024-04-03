@@ -65,6 +65,9 @@ $route['katalog-ebook'] = 'katalog/ebook';
 $route['katalog-ebook/(:num)'] = 'katalog/show_ebook/$1';
 $route['pinjam-buku'] = 'katalog/pinjam';
 $route['riwayat-pinjam-buku'] = 'katalog/history';
+$route['add-to-cart/(:num)'] = 'katalog/add_to_cart/$1';
+$route['clear-cart'] = 'katalog/clear_cart';
+$route['clear-cart/(:num)'] = 'katalog/remove_cart/$1';
 
 $route['bukti-pinjam-buku/(:num)'] = 'cetak/peminjaman/$1';
 $route['cetak-kartu-anggota'] = 'cetak/anggota';

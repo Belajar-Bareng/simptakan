@@ -21,7 +21,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="row" id="catalogue-content" data-items='<?= json_encode($items) ?>' data-segment='<?= $segment ?>'>
+      <div class="row" id="catalogue-content" data-items='<?= json_encode($items) ?>' data-segment='<?= $segment ?>' data-carts='<?= json_encode($carts) ?>'>
       </div>
     </section>
     <!-- /.content -->
@@ -33,7 +33,19 @@
 <script>
 	const containerElement = document.getElementById('catalogue-content');
 	const catalogueBooks = JSON.parse(containerElement.dataset.items);
+	const cartBooks = JSON.parse(containerElement.dataset.carts);
 	const segment = containerElement.dataset.segment;
+
+	let cartButtons = [];
+
+	const addToCart = (e) => {
+		console.log(e.target.dataset.id);
+		fetch(`<?= base_url('') ?>katalog/add_to_cart/${e.target.dataset.id}`).then(res => res.json()).then(res => {
+			window.location.reload();
+		}).catch(e => {
+			window.alert('Gagal Menambahkan ke Keranjang');
+		});
+	};
 	
 	const bookCart = (book) => {
 		const link = `<?= base_url('') ?>` + segment + '/' + (book.id_buku ?? book.id_ebook);
@@ -55,10 +67,11 @@
 			return isbnNumber.slice(0, 3) + '-' + isbnNumber.slice(3, 6) + '-' + isbnNumber.slice(6, 11) + '-' + isbnNumber.slice(11, 12) + '-' + isbnNumber.slice(12);
 		}
 
+		const addToCartButton = book.id_buku && !cartBooks.map(e => e.id_buku).includes(book.id_buku) && cartBooks.length < 3 ? `<button class="btn btn-xs btn-warning add-to-cart" data-id="` + book.id_buku + `"><i class="fa fa-cart-plus" data-id="` + book.id_buku + `"></i></button>` : '';
+
 		let template = `<div class="col-lg-3 col-md-6 col-sm-6">
 							<div class="box box-widget widget-user">
-								<div class="widget-user-header bg-black" style="background: url('` + image + `') center center; height: 250px;">
-								</div>
+								<div class="widget-user-header bg-black" style="background: url('` + image + `') center center; height: 250px; position: relative;">` + addToCartButton + `</div>
 								<div class="box-footer no-padding">
 									<ul class="nav nav-stacked">
 										<li><a href="` + link + `">` + (book.isbn ? isbn(book.isbn) : '-') + ` <span class="pull-right badge bg-red">ISBN</span></a></li>
@@ -79,6 +92,10 @@
 	};
 
 	const renderCards = (search) => {
+		cartButtons.forEach(btn => {
+			btn?.removeEventListener("click", addToCart);
+		});
+
 		containerElement.innerHTML = '';
 		for (const book of catalogueBooks) {
 			if (!book.judul.toLowerCase().includes(search) && !book.isbn?.includes(search)) {
@@ -87,6 +104,12 @@
 			
 			containerElement.innerHTML += bookCart(book);
 		}
+
+		cartButtons = document.querySelectorAll('button.add-to-cart');
+
+		cartButtons.forEach(btn => {
+			btn.addEventListener('click', addToCart);
+		});
 	}
 
 	document.getElementById('search-catalogue').addEventListener('keyup', function(e) {

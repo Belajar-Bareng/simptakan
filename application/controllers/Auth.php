@@ -164,6 +164,7 @@ class Auth extends CI_Controller {
                     setSession('jabatan', 'Anggota');
                     setSession('foto', $siswa['foto']);
                     setSession('username', $user['username']);
+					setSession('carts', isset($_SESSION['carts']) ? $_SESSION['carts'] : []);
                     redirect('/katalog');
                 } else {
                     $petugas = $this->petugas->getByAkun($user['id_akun']);

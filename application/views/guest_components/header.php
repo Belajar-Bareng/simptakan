@@ -73,6 +73,27 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
+						<li class="dropdown notifications-menu">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								<i class="fa fa-shopping-cart"></i>
+								<span class="label label-warning"><?= count($carts) ?></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="header"><?= count($carts) > 0 ? "Ada <b>" . count($carts) . " buku</b> di keranjangmu" : "Belum ada buku di keranjangmu" ?></li>
+								<li>
+									<ul class="menu">
+										<?php foreach($carts as $item): ?>
+										<li>
+											<a href="<?= base_url('katalog/' . $item['id_buku']) ?>">
+												<div style="margin: 0px 3px 0 0;width: 14px; height: 14px; display: inline-block; background: url(<?= $item['foto'] ? upload($item['foto']): asset('img/book.png') ?>) center center; border-radius: 150px"></div> <?= $item['judul'] ?>
+											</a>
+										</li>
+										<?php endforeach; ?>
+									</ul>
+								</li>
+								<li class="footer"><a href="/pinjam-buku">Buka Keranjang</a></li>
+							</ul>
+						</li>
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
