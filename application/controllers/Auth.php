@@ -159,6 +159,7 @@ class Auth extends CI_Controller {
                         'kelas' => $siswa['kelas'],
                         'keperluan' => 'Masuk sebagai Anggota'
                     ]);
+					setSession('id', $user['id_akun']);
                     setSession('nis', $siswa['nis']);
                     setSession('nama', $siswa['nama']);
                     setSession('jabatan', 'Anggota');

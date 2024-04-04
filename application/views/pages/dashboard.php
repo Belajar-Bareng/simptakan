@@ -123,6 +123,50 @@
           <!-- /.box -->
         </div>
         <div class="col-lg-6">
+
+					<?php if(isJabatan('Petugas')): ?>
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Pengajuan Peminjaman Buku</h3>
+						</div>
+
+						<div class="box-body">
+							<?php if(count($to_be_confirmed) > 0): ?>
+								<ul class="products-list product-list-in-box">
+									<?php foreach($to_be_confirmed as $index => $item): ?>
+									<li class="item">
+										<div class="product-img">
+											<img style="border-radius: 100%; width: 100%" src="<?= asset('img/profile.png') ?>" alt="Product Image" />
+										</div>
+										<div class="product-info">
+											<div class="product-title">
+												Tanggal <?= date('d/m/Y', strtotime($item['tanggal_pinjam'])) . ' s.d. ' . date('d/m/Y', strtotime($item['tanggal_tenggat'])) ?>
+												<a href="<?= base_url('/ubah-pengajuan/' . $item['id'] . '/status/1') ?>" onclick="return confirm('Anda yakin ingin menyutujui peminjaman?')" class="label label-success pull-right"><i class="fa fa-check"></i></a>
+												<a href="<?= base_url('/ubah-pengajuan/' . $item['id'] . '/status/2') ?>" style="margin-right: 3px;" onclick="return confirm('Anda yakin ingin menolak peminjaman?')" class="label label-danger pull-right"><i class="fa fa-remove"></i></a>
+											</div>
+											<span class="product-description"><?= $item['nama'] . ' (' . $item['nis'] . ')' ?></span>
+										</div>
+										<div style="margin-top: 15px;">
+											<?php if(count($item['books']) > 0): ?>
+												<!-- <ol> -->
+													<?php foreach($item['books'] as $index => $book): ?>
+														<div><?= $index + 1 . '. ' .  $book['judul'] ?></div>
+													<?php endforeach; ?>
+													<!-- </ol> -->
+											<?php else: ?>
+												<p>Belum ada pengajuan baru.</p>
+											<?php endif; ?>
+										</div>
+									</li>
+									<?php endforeach; ?>
+								</ul>
+							<?php else: ?>
+								<p>Belum ada pengajuan baru.</p>
+							<?php endif; ?>
+						</div>
+					</div>
+					<?php endif; ?>
+
           <!-- Default box -->
           <div class="box">
             <div class="box-header with-border">

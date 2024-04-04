@@ -17,6 +17,7 @@ class Katalog extends CI_Controller
 
         $this->load->model(Peminjaman_model::class, 'peminjaman');
         $this->load->model(PeminjamanDetail_model::class, 'detail');
+		$this->load->model(PengajuanPeminjaman_model::class, 'pengajuan');
     }
 
     public function index()
@@ -54,27 +55,34 @@ class Katalog extends CI_Controller
         if ($this->form_validation->run()) {
             $data = $this->input->post();
 
-            $peminjaman = [
-                'nis' => $data['nis'],
-                'tanggal_tenggat' => $data['tanggal_tenggat'],
-                'email' => $data['email'],
-                'keterangan' => $data['keterangan'],
-            ];
-            $dataId = array_unique($data['id_buku']);
-            $no = $this->peminjaman->insert($peminjaman);
-            foreach ($dataId as $id_buku) {
-                $this->detail->insert([
-                    'no_peminjaman' => $no,
-                    'id_buku' => $id_buku,
+			$details = [];
+            foreach ($data['id_buku'] as $index => $id) {
+                $details[] = [
+                    'no_peminjaman' => null,
+                    'id_buku' => $id,
                     'tanggal_kembali' => null,
-                ]);
+					'judul' => $_SESSION['carts'][$index]['judul'],
+                ];
             }
+			$pengajuan = [
+				'id_akun' => $_SESSION['id'],
+				'konten' => json_encode([
+					'nis' => $data['nis'],
+					'nama' => $_SESSION['nama'],
+					'tanggal_tenggat' => $data['tanggal_tenggat'],
+					'email' => $data['email'],
+					'keterangan' => $data['keterangan'],
+					'details' => $details,
+				]),
+			];
+
+			$this->pengajuan->insert($pengajuan);
 
             $message = 'Berhasil meminjam buku!';
 			$_SESSION['carts'] = [];
 
             setMessage($message);
-            redirect('/riwayat-pinjam-buku');
+            redirect('/riwayat-pinjam-buku#pengajuan-peminjaman');
         };
 
         $data = [
@@ -91,10 +99,26 @@ class Katalog extends CI_Controller
     {
         if (!isset($_SESSION['nis'])) return redirect('logbook');
 
+		$props = [];
+
+		$temps = $this->pengajuan->getAllByAccountID($_SESSION['id']);
+		foreach ($temps as $temp) {
+			$content = json_decode($temp['konten'], true);
+			foreach ($content['details'] as $detail) {
+				$props[] = [
+					'judul' => $detail['judul'] ?? '-',
+					'tanggal_pinjam' => $temp['created_at'],
+					'tanggal_tenggat' => $content['tanggal_tenggat'],
+					'status' => $temp['status'] == 0 ? 'Menunggu Persetujuan' : ($temp['status'] == 1 ? 'Disetujui' : 'Ditolak'),
+				];
+			}
+		}
+
         $data = [
             'title' => 'Riwayat Peminjaman',
             'sidebar' => ['riwayat'],
             'items' => $this->detail->getAllDipinjamNis($_SESSION['nis']),
+			'prop_items' => $props,
 			'carts' => $_SESSION['carts'],
         ];
 

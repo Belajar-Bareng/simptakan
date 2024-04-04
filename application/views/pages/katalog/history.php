@@ -1,25 +1,7 @@
 <!-- Full Width Column -->
 <div class="content-wrapper">
   <div class="container">
-    <!-- Content Header (Page header) -->
-    <form action="<?php in_array('buku', $sidebar) ? site_url('katalog') : site_url('katalog-ebook') ?>" method="get">
-      <section class="content-header">
-        <div class="row">
-          <div class="col-lg-6">
-          </div>
-          <div class="col-lg-6">
-            <div class="input-group">
-              <input type="text" name="q" placeholder="Pencarian..." class="form-control" value="<?= isset($_GET['q']) ? $_GET['q'] : ''; ?>">
-              <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary btn-flat">Cari</button>
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </form>
-
-
+		
     <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -32,8 +14,12 @@
             </div>
           <?php endif; ?>
           <div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Riwayat Peminjaman</h3>
+							<p>Kamu baru saja mengajukan peminjaman? Klik <a href="#pengajuan-peminjaman">di sini</a> untuk melihat daftar pengajuan peminjaman kamu.</p>
+						</div>
             <div class="box-body">
-              <table id="table1" class="table table-bordered table-striped">
+              <table id="table1" class="table1 table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th style="width: 20px;">No.</th>
@@ -44,7 +30,7 @@
                     <th>Denda</th>
                     <th>Status</th>
                     <th>Pengingat</th>
-                    <th>Bukti</th>
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -79,6 +65,37 @@
                         <a href="<?= base_url("bukti-pinjam-buku/{$item['id_peminjaman']}"); ?>" target="_blank" class="btn btn-primary btn-sm">Cetak</a>
                         <a href="#" class="btn btn-success btn-sm btn-ubah-tenggat" data-toggle="modal" data-target="#tenggatModal" data-id="<?= $item['no_peminjaman']; ?>" data-tenggat="<?= $item['tanggal_tenggat']; ?>">Perpanjang</a>
                       </td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+
+          <div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Pengajuan Peminjaman</h3>
+						</div>
+            <div class="box-body" id="pengajuan-peminjaman">
+              <table id="table3" class="table1 table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 20px;">No.</th>
+                    <th>Judul Buku</th>
+                    <th>Dipinjam</th>
+                    <th>Tenggat</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php foreach ($prop_items as $index => $item) : ?>
+                    <tr>
+                      <td><?= $index + 1 ?></td>
+                      <td><?= $item['judul'] ?: '-'; ?></td>
+                      <td><?= date('d/m/Y', strtotime($item['tanggal_pinjam'])); ?></td>
+                      <td><?= date('d/m/Y', strtotime($item['tanggal_tenggat'])); ?></td>
+                      <td><?= $item['status'] ?></td>
                     </tr>
                   <?php endforeach; ?>
                 </tbody>
