@@ -1,13 +1,13 @@
--- MariaDB dump 10.19  Distrib 10.4.27-MariaDB, for Win64 (AMD64)
+-- MySQL dump 10.13  Distrib 8.3.0, for macos12.3 (arm64)
 --
 -- Host: localhost    Database: perpustakaan
 -- ------------------------------------------------------
--- Server version	10.4.27-MariaDB
+-- Server version	8.3.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,13 +21,13 @@
 
 DROP TABLE IF EXISTS `akun`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `akun` (
-  `id_akun` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `peran` enum('kepala','petugas','anggota') NOT NULL,
-  `status` int(11) DEFAULT 1,
+  `id_akun` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `peran` enum('kepala','petugas','anggota') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `status` int DEFAULT '1',
   PRIMARY KEY (`id_akun`)
 ) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -48,20 +48,20 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `buku`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `buku` (
-  `id_buku` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(255) NOT NULL,
-  `isbn` char(13) DEFAULT NULL,
-  `pengarang` varchar(255) DEFAULT NULL,
-  `tahun` int(4) DEFAULT NULL,
-  `id_rak` int(11) DEFAULT NULL,
-  `id_kategori` int(11) DEFAULT NULL,
-  `kode_klasifikasi` int(11) DEFAULT NULL,
-  `id_penerbit` int(11) DEFAULT NULL,
-  `jumlah` int(11) DEFAULT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `tanggal` datetime DEFAULT current_timestamp(),
+  `id_buku` int NOT NULL AUTO_INCREMENT,
+  `judul` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `isbn` char(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pengarang` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tahun` int DEFAULT NULL,
+  `id_rak` int DEFAULT NULL,
+  `id_kategori` int DEFAULT NULL,
+  `kode_klasifikasi` int DEFAULT NULL,
+  `id_penerbit` int DEFAULT NULL,
+  `jumlah` int DEFAULT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tanggal` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_buku`)
 ) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -82,13 +82,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `buku_keluar`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `buku_keluar` (
-  `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT,
-  `tanggal` datetime DEFAULT current_timestamp(),
-  `id_buku` int(11) DEFAULT NULL,
-  `jumlah` int(11) DEFAULT NULL,
-  `keterangan` varchar(255) DEFAULT NULL,
+  `id_pengeluaran` int NOT NULL AUTO_INCREMENT,
+  `tanggal` datetime DEFAULT CURRENT_TIMESTAMP,
+  `id_buku` int DEFAULT NULL,
+  `jumlah` int DEFAULT NULL,
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_pengeluaran`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -125,16 +125,16 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `ebook`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ebook` (
-  `id_ebook` int(11) NOT NULL AUTO_INCREMENT,
-  `judul` varchar(255) DEFAULT NULL,
-  `isbn` char(13) DEFAULT NULL,
-  `pengarang` varchar(255) DEFAULT NULL,
-  `tahun` int(4) DEFAULT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `berkas` varchar(255) NOT NULL,
-  `tanggal` datetime DEFAULT current_timestamp(),
+  `id_ebook` int NOT NULL AUTO_INCREMENT,
+  `judul` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `isbn` char(13) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pengarang` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tahun` int DEFAULT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `berkas` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `tanggal` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_ebook`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -155,11 +155,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `kategori`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `kategori` (
-  `id_kategori` int(11) NOT NULL AUTO_INCREMENT,
-  `kategori` varchar(50) NOT NULL,
-  `keterangan` varchar(255) DEFAULT NULL,
+  `id_kategori` int NOT NULL AUTO_INCREMENT,
+  `kategori` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_kategori`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -180,12 +180,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `klasifikasi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `klasifikasi` (
-  `kode_klasifikasi` int(10) NOT NULL AUTO_INCREMENT,
-  `nmr_klasifikasi` varchar(10) NOT NULL,
-  `klasifikasi` varchar(50) NOT NULL,
-  `keterangan` varchar(255) DEFAULT NULL,
+  `kode_klasifikasi` int NOT NULL AUTO_INCREMENT,
+  `nmr_klasifikasi` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `klasifikasi` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`kode_klasifikasi`)
 ) ENGINE=InnoDB AUTO_INCREMENT=905 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -206,14 +206,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `password_reset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset` (
   `created_at` datetime DEFAULT NULL,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_akun` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_akun` int DEFAULT NULL,
   `token` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -232,15 +232,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `peminjaman`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `peminjaman` (
-  `no_peminjaman` int(11) NOT NULL AUTO_INCREMENT,
-  `nis` varchar(15) DEFAULT NULL,
-  `nama` int(11) DEFAULT NULL,
-  `tanggal_pinjam` datetime DEFAULT current_timestamp(),
+  `no_peminjaman` int NOT NULL AUTO_INCREMENT,
+  `nis` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nama` int DEFAULT NULL,
+  `tanggal_pinjam` datetime DEFAULT CURRENT_TIMESTAMP,
   `tanggal_tenggat` datetime DEFAULT NULL,
-  `keterangan` varchar(255) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`no_peminjaman`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -261,13 +261,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `peminjaman_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `peminjaman_detail` (
-  `id_peminjaman` int(11) NOT NULL AUTO_INCREMENT,
-  `no_peminjaman` int(11) NOT NULL,
-  `id_buku` int(11) NOT NULL,
+  `id_peminjaman` int NOT NULL AUTO_INCREMENT,
+  `no_peminjaman` int NOT NULL,
+  `id_buku` int NOT NULL,
   `tanggal_kembali` datetime DEFAULT NULL,
-  `denda` int(11) DEFAULT NULL,
+  `denda` int DEFAULT NULL,
+  `status` tinyint DEFAULT '1',
   PRIMARY KEY (`id_peminjaman`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -278,7 +279,7 @@ CREATE TABLE `peminjaman_detail` (
 
 LOCK TABLES `peminjaman_detail` WRITE;
 /*!40000 ALTER TABLE `peminjaman_detail` DISABLE KEYS */;
-INSERT INTO `peminjaman_detail` VALUES (1,1,31,'2024-03-19 13:50:52',0),(2,1,32,'2024-03-19 13:50:48',0),(3,1,33,'2024-03-19 13:50:42',0),(4,2,34,'2024-04-02 15:37:12',5500),(5,3,31,NULL,NULL);
+INSERT INTO `peminjaman_detail` VALUES (1,1,31,'2024-03-19 13:50:52',0,1),(2,1,32,'2024-03-19 13:50:48',0,1),(3,1,33,'2024-03-19 13:50:42',0,1),(4,2,34,'2024-04-02 15:37:12',5500,1),(5,3,31,NULL,NULL,1);
 /*!40000 ALTER TABLE `peminjaman_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -320,13 +321,13 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `penerbit`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `penerbit` (
-  `id_penerbit` int(11) NOT NULL AUTO_INCREMENT,
-  `penerbit` varchar(255) NOT NULL,
-  `alamat` varchar(255) DEFAULT NULL,
-  `no_telp` varchar(15) DEFAULT NULL,
-  `keterangan` varchar(255) DEFAULT NULL,
+  `id_penerbit` int NOT NULL AUTO_INCREMENT,
+  `penerbit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `no_telp` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_penerbit`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -347,14 +348,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pengadaan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pengadaan` (
-  `id_pengadaan` int(11) NOT NULL AUTO_INCREMENT,
-  `no_inventaris` varchar(50) NOT NULL,
-  `tanggal` datetime DEFAULT current_timestamp(),
-  `sumber` varchar(50) DEFAULT NULL,
-  `pemasok` varchar(255) DEFAULT NULL,
-  `keterangan` varchar(255) DEFAULT NULL,
+  `id_pengadaan` int NOT NULL AUTO_INCREMENT,
+  `no_inventaris` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `tanggal` datetime DEFAULT CURRENT_TIMESTAMP,
+  `sumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `pemasok` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_pengadaan`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -375,13 +376,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pengadaan_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pengadaan_detail` (
-  `id_pengadaan_detail` int(11) NOT NULL AUTO_INCREMENT,
-  `id_pengadaan` int(11) DEFAULT NULL,
-  `id_buku` int(11) DEFAULT NULL,
-  `jumlah` int(11) DEFAULT NULL,
-  `harga` int(11) DEFAULT NULL,
+  `id_pengadaan_detail` int NOT NULL AUTO_INCREMENT,
+  `id_pengadaan` int DEFAULT NULL,
+  `id_buku` int DEFAULT NULL,
+  `jumlah` int DEFAULT NULL,
+  `harga` int DEFAULT NULL,
   PRIMARY KEY (`id_pengadaan_detail`)
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -397,19 +398,48 @@ INSERT INTO `pengadaan_detail` VALUES (1,1,2,100,0),(2,2,3,20,0),(3,3,4,200,0),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pengajuan_peminjaman`
+--
+
+DROP TABLE IF EXISTS `pengajuan_peminjaman`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pengajuan_peminjaman` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `konten` text NOT NULL,
+  `id_akun` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` tinyint DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `id_akun` (`id_akun`),
+  CONSTRAINT `pengajuan_peminjaman_ibfk_1` FOREIGN KEY (`id_akun`) REFERENCES `akun` (`id_akun`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pengajuan_peminjaman`
+--
+
+LOCK TABLES `pengajuan_peminjaman` WRITE;
+/*!40000 ALTER TABLE `pengajuan_peminjaman` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pengajuan_peminjaman` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pengunjung`
 --
 
 DROP TABLE IF EXISTS `pengunjung`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pengunjung` (
-  `id_pengunjung` int(11) NOT NULL AUTO_INCREMENT,
-  `tanggal` timestamp NULL DEFAULT current_timestamp(),
-  `nis` varchar(15) DEFAULT NULL,
-  `nama` varchar(50) DEFAULT NULL,
-  `kelas` varchar(15) DEFAULT NULL,
-  `keperluan` varchar(255) DEFAULT NULL,
+  `id_pengunjung` int NOT NULL AUTO_INCREMENT,
+  `tanggal` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `nis` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nama` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `kelas` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `keperluan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_pengunjung`)
 ) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -430,17 +460,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `petugas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `petugas` (
-  `id_petugas` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(50) NOT NULL,
-  `nip` varchar(50) DEFAULT NULL,
-  `jenis_kelamin` enum('L','P') DEFAULT NULL,
-  `no_telp` varchar(15) DEFAULT NULL,
-  `alamat` varchar(255) DEFAULT NULL,
-  `jabatan` enum('Kepala','Petugas') NOT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `id_akun` int(11) NOT NULL,
+  `id_petugas` int NOT NULL AUTO_INCREMENT,
+  `nama` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `nip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `jenis_kelamin` enum('L','P') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `no_telp` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alamat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `jabatan` enum('Kepala','Petugas') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_akun` int NOT NULL,
   PRIMARY KEY (`id_petugas`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -461,11 +491,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rak`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rak` (
-  `id_rak` int(11) NOT NULL AUTO_INCREMENT,
-  `rak` varchar(50) NOT NULL,
-  `keterangan` varchar(255) DEFAULT NULL,
+  `id_rak` int NOT NULL AUTO_INCREMENT,
+  `rak` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `keterangan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_rak`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -486,17 +516,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `siswa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `siswa` (
-  `tanggal` datetime DEFAULT current_timestamp(),
-  `nis` varchar(15) NOT NULL,
-  `nama` varchar(255) NOT NULL,
-  `jenis_kelamin` enum('L','P') NOT NULL,
-  `kelas` varchar(15) NOT NULL,
-  `alamat` varchar(255) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `id_akun` int(11) DEFAULT NULL,
+  `tanggal` datetime DEFAULT CURRENT_TIMESTAMP,
+  `nis` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `jenis_kelamin` enum('L','P') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `kelas` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `alamat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id_akun` int DEFAULT NULL,
   PRIMARY KEY (`nis`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -520,4 +550,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-02 22:48:10
+-- Dump completed on 2024-04-04 17:04:01

@@ -1,25 +1,7 @@
 <!-- Full Width Column -->
 <div class="content-wrapper">
     <div class="container">
-        <!-- Content Header (Page header) -->
-        <form action="<?php in_array('buku', $sidebar) ? site_url('katalog') : site_url('katalog-ebook') ?>" method="get">
-            <section class="content-header">
-                <div class="row">
-                    <div class="col-lg-6">
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <input type="text" name="q" placeholder="Pencarian..." class="form-control" value="<?= isset($_GET['q']) ? $_GET['q'] : ''; ?>">
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn btn-primary btn-flat">Cari</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </form>
-
-
+        
         <form class="form-horizontal" method="POST" action="<?= current_url(); ?>">
             <!-- Main content -->
             <section class="content">
@@ -31,7 +13,45 @@
                     </div>
                 <?php endif; ?>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
+
+						<div class="box box-primary">
+							<div class="box-header with-border">
+								<h3 class="box-title">Keranjang</h3>
+							</div>
+
+							<?php if(count($carts) > 0): ?>
+							<div class="box-body">
+								<ul class="products-list product-list-in-box">
+									<?php foreach($carts as $index => $cart): ?>
+									<li class="item">
+										<div class="product-img">
+											<img src="<?= $cart['foto'] ? upload($cart['foto']) : asset('img/book.png') ?>" alt="Product Image">
+											<input type="hidden" name="id_buku[]" value="<?= $cart['id_buku'] ?>">
+										</div>
+										<div class="product-info">
+											<div class="product-title">
+												<?= $cart['isbn'] ? isbn($cart['isbn']) : '-'; ?> <a href="<?= base_url('clear-cart/' . $cart['id_buku']) ?>" onclick="return confirm('Anda yakin ingin menghapusnya dari keranjang?')" class="label label-danger pull-right"><i class="fa fa-remove"></i></a>
+											</div>
+											<span class="product-description"><?= $cart['judul'] ?></span>
+										</div>
+									</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+
+							<div class="box-footer text-center">
+								<a href="<?= base_url('/clear-cart') ?>" onclick="return confirm('Anda yakin ingin membersihkan keranjang?')" class="uppercase">Bersihkan Keranjang</a>
+							</div>
+							<?php else: ?>
+							<div class="box-body">
+								<p>Belum ada buku di keranjangmu.</p>
+							</div>
+							<?php endif; ?>
+
+						</div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
                         <!-- Default box -->
                         <div class="box">
                             <div class="box-header with-border">
@@ -77,52 +97,9 @@
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary pull-right">Pinjam</button>
+                                <button type="submit" <?= count($carts) > 0 ? '' : 'disabled' ?> class="btn btn-primary pull-right">Ajukan Peminjaman</button>
                             </div>
                             <!-- /.box-footer -->
-                        </div>
-                        <!-- /.box -->
-                    </div>
-                    <div class="col-lg-6">
-
-                        <!-- Default box -->
-                        <div class="box">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Buku</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <select class="form-control select2" name="id_buku[]">
-                                            <option value="-">-- Belum dipilih --</option>
-                                            <?php foreach ($buku as $item) : ?>
-                                                <option value="<?= $item['id_buku']; ?>"><?= $item['judul']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <select class="form-control select2" name="id_buku[]">
-                                            <option value="-">-- Belum dipilih --</option>
-                                            <?php foreach ($buku as $item) : ?>
-                                                <option value="<?= $item['id_buku']; ?>"><?= $item['judul']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <select class="form-control select2" name="id_buku[]">
-                                            <option value="-">-- Belum dipilih --</option>
-                                            <?php foreach ($buku as $item) : ?>
-                                                <option value="<?= $item['id_buku']; ?>"><?= $item['judul']; ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
                         </div>
                         <!-- /.box -->
                     </div>

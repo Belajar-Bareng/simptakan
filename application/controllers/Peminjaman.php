@@ -14,6 +14,7 @@ class Peminjaman extends CI_Controller
         if (!isLogin()) return redirect('/login');
         $this->load->model(Peminjaman_model::class, 'peminjaman');
         $this->load->model(PeminjamanDetail_model::class, 'detail');
+		$this->load->model(PengajuanPeminjaman_model::class, 'pengajuan');
         $this->load->model(Siswa_model::class, 'siswa');
         $this->load->model(Buku_model::class, 'buku');
 
@@ -45,7 +46,28 @@ class Peminjaman extends CI_Controller
             'title' => 'Riwayat Peminjaman',
             'sidebar' => ['peminjaman'],
             'items' => $this->detail->getAllDetail(),
+			'chart' => [],
         ];
+
+		$dateLabel = [];
+		$map = [];
+
+		foreach ($data['items'] as $item) {
+			$date = date('d/m/Y', strtotime($item['tanggal_pinjam']));
+			if(isset($map[$date])) {
+				$map[$date]++;
+			} else {
+				array_push($dateLabel, $date);
+				$map[$date] = 1;
+			}
+		}
+
+		foreach ($dateLabel as $date) {
+			array_push($data['chart'], [
+				'total' => $map[$date],
+				'date' => $date,
+			]);
+		}
 
         view('peminjaman/history', $data);
     }
@@ -62,6 +84,19 @@ class Peminjaman extends CI_Controller
         setMessage($message);
         redirect('/peminjaman');
     }
+
+	public function kehilangan($id)
+	{
+		$detail = $this->detail->getDetail($id);
+		$book = $this->buku->get($detail['id_buku']);
+
+		$this->detail->update(['denda' => 50_000, 'status' => 0], $id);
+		$this->buku->update(['jumlah' => $book['jumlah']], $detail['id_buku']);
+
+		$message = 'Buku telah ditandai hilang ketika peminjaman!';
+		setMessage($message);
+		redirect('/peminjaman');
+	}
 
     public function perpanjang()
     {
@@ -179,4 +214,40 @@ class Peminjaman extends CI_Controller
         setMessage($message);
         redirect('/peminjaman');
     }
+
+	public function process_book_application($id, $status)
+	{
+		$prop = $this->pengajuan->get($id);
+		$prop['status'] = $status == 1 ? 1: 2;
+		$this->pengajuan->update($prop, $id);
+
+		if ($status == 2) {
+			$message = 'Berhasil menolak pengajuan peminjaman buku!';
+			setMessage($message);
+			redirect('/dashboard');
+			return;
+		}
+
+		$content = json_decode($prop['konten'], true);
+
+		$peminjaman = [
+			'nis' => $content['nis'],
+			'tanggal_tenggat' => $content['tanggal_tenggat'],
+			'email' => $content['email'],
+			'keterangan' => $content['keterangan'],
+		];
+		$no = $this->peminjaman->insert($peminjaman);
+
+		foreach ($content['details'] as $book) {
+			$this->detail->insert([
+				'no_peminjaman' => $no,
+				'id_buku' => $book['id_buku'],
+				'tanggal_kembali' => null,
+			]);
+		}
+
+        $message = 'Berhasil menyetujui pengajuan peminjaman buku!';
+        setMessage($message);
+		redirect('/dashboard');
+	}
 }

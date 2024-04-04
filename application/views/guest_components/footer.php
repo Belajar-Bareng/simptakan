@@ -39,37 +39,9 @@
 <script>
 
   $(function() {
-    var table1 = $('#table1').DataTable({
+    var table1 = $('.table1').DataTable({
         responsive: true,
         buttons: [ 
-           // {
-          //     extend: 'copy',
-          //     exportOptions: {
-          //         columns: ':not(.notexport)'
-          //     }
-          // },
-          // {
-          //     extend: 'excel',
-          //     text: 'Excel',
-          //     exportOptions: {
-          //         columns: ':not(.notexport)'
-          //     }
-          // },
-          // {
-          //     extend: 'pdf',
-          //     text: 'PDF',
-          //     exportOptions: {
-          //         columns: ':not(.notexport)'
-          //     },
-          //     customize: function (doc) {
-          //         doc.content[1].table.widths = 
-          //             Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-          //     }
-          // },
-          // {
-          //     extend: 'colvis',
-          //     text: 'Kolom',
-          // },
         ]
       });
       table1.buttons().container().appendTo( '#table1_wrapper .col-sm-6:eq(0)' );

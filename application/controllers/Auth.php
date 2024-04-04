@@ -159,11 +159,13 @@ class Auth extends CI_Controller {
                         'kelas' => $siswa['kelas'],
                         'keperluan' => 'Masuk sebagai Anggota'
                     ]);
+					setSession('id', $user['id_akun']);
                     setSession('nis', $siswa['nis']);
                     setSession('nama', $siswa['nama']);
                     setSession('jabatan', 'Anggota');
                     setSession('foto', $siswa['foto']);
                     setSession('username', $user['username']);
+					setSession('carts', isset($_SESSION['carts']) ? $_SESSION['carts'] : []);
                     redirect('/katalog');
                 } else {
                     $petugas = $this->petugas->getByAkun($user['id_akun']);

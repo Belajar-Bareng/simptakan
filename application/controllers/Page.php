@@ -20,6 +20,7 @@ class Page extends CI_Controller
         $this->load->model(Pengunjung_model::class, 'pengunjung');
 
         $this->load->model(Petugas_model::class, 'petugas');
+		$this->load->model(PengajuanPeminjaman_model::class, 'pengajuan');
     }
 
     public function index()
@@ -48,6 +49,28 @@ class Page extends CI_Controller
         if (!isLogin()) return redirect('/login');
         if (isJabatan('Anggota') or isJabatan('Pengunjung')) return redirect('katalog');
 
+		$props = [];
+		$temps = $this->pengajuan->getAllUnconfirmed();
+		foreach ($temps as $index => $temp) {
+			$content = json_decode($temp['konten'], true);
+			$props[$index] = [
+				'id' => $temp['id'],
+				'nis' => $content['nis'],
+				'nama' => $content['nama'] ?? '-',
+				'tanggal_pinjam' => $temp['created_at'],
+				'tanggal_tenggat' => $content['tanggal_tenggat'],
+				'books' => [],
+			];
+			foreach ($content['details'] as $detail) {
+				$props[$index]['books'][] = [
+					'judul' => $detail['judul'] ?? '-',
+					'tanggal_pinjam' => $temp['created_at'],
+					'tanggal_tenggat' => $content['tanggal_tenggat'],
+					'status' => $temp['status'] == 0 ? 'Menunggu Persetujuan' : 'Ditolak',
+				];
+			}
+		}
+
         $data = [
             'title' => 'Dashboard',
             'sidebar' => ['dashboard'],
@@ -61,6 +84,7 @@ class Page extends CI_Controller
             'bukubaru' => $this->peminjaman_detail->getbukubaru(),
 			'new_book' => $this->buku->getAllNewBook(),
 			'new_ebook' => $this->ebook->getAllNewBook(),
+			'to_be_confirmed' => $props,
         ];
 
         view('dashboard', $data);

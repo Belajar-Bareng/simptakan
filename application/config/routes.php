@@ -65,6 +65,9 @@ $route['katalog-ebook'] = 'katalog/ebook';
 $route['katalog-ebook/(:num)'] = 'katalog/show_ebook/$1';
 $route['pinjam-buku'] = 'katalog/pinjam';
 $route['riwayat-pinjam-buku'] = 'katalog/history';
+$route['add-to-cart/(:num)'] = 'katalog/add_to_cart/$1';
+$route['clear-cart'] = 'katalog/clear_cart';
+$route['clear-cart/(:num)'] = 'katalog/remove_cart/$1';
 
 $route['bukti-pinjam-buku/(:num)'] = 'cetak/peminjaman/$1';
 $route['cetak-kartu-anggota'] = 'cetak/anggota';
@@ -77,8 +80,10 @@ $route['riwayat-pengadaan'] = 'pengadaan/history';
 $route['pengeluaran'] = 'pengeluaran';
 $route['riwayat-pengeluaran'] = 'pengeluaran/history';
 $route['perpanjang'] = 'peminjaman/perpanjang';
+$route['ubah-pengajuan/(:num)/status/(:num)'] = 'peminjaman/process_book_application/$1/$2';
 $route['send'] = 'peminjaman/send';
 $route['pengembalian/(:num)'] = 'peminjaman/pengembalian/$1';
+$route['kehilangan/(:num)'] = 'peminjaman/kehilangan/$1';
 $route['pengeluaran'] = 'pengeluaran';
 
 $route['laporan-pengunjung'] = 'page/pengunjung';
