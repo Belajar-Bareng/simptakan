@@ -143,64 +143,52 @@
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($dipinjam as $item) : ?>
+            <?php foreach ($dipinjam as $index => $item) : ?>
               <tr>
                 <?php $pinjam = strtotime($item['tanggal_pinjam']); ?>
                 <?php $tenggat = strtotime($item['tanggal_tenggat']); ?>
-                <td><?= $item['no_peminjaman']; ?></td>
+                <td><?= $index + 1 ?? $item['no_peminjaman']; ?></td>
                 <td><?= $item['nama'] ?: '-'; ?></td>
                 <td><?= $item['judul'] ?: '-'; ?></td>
                 <td><?= date('d/m/Y', $pinjam); ?></td>
                 <td><?= date('d/m/Y', $tenggat); ?></td>
-                <td>Rp<?= time() > $tenggat ? number_format(floor((time() - $tenggat) / 60 / 60 / 24) * 500, 2, ",", ".") : '0'; ?></td>
+                <td>
+									<?php if($item['status'] == 0): ?>
+										Rp50.000,00
+									<?php else: ?>
+										Rp<?= time() > $tenggat ? number_format(floor((time() - $tenggat) / 60 / 60 / 24) * 500, 2, ",", ".") : '0'; ?>
+									<?php endif; ?>
+								</td>
                 <td>
                   <?php
                   $tanggal_sekarang = new DateTime();
                   $tanggal_tenggat = new DateTime($item['tanggal_tenggat']);
                   $selisih_tanggal = $tanggal_sekarang->diff($tanggal_tenggat);
                   ?>
-                  <?php if ($tanggal_sekarang < $tanggal_tenggat) { ?>
+                  <?php if ($item['status'] == 0): ?>
+                    <div class="badge bg-red">Buku Hilang</div>
+                  <?php elseif ($tanggal_sekarang < $tanggal_tenggat): ?>
                     <div class="badge bg-red">Kembalikan <?php echo $selisih_tanggal->days + 1 ?> Hari Lagi</div>
-                  <?php } else if (!empty($item['tanggal_kembali'])) { ?>
+                  <?php elseif (!empty($item['tanggal_kembali'])): ?>
                     <div>-</div>
-                  <?php } else { ?>
+                  <?php else: ?>
                     <div class="badge bg-red">Segera Dikembalikan</div>
-                  <?php } ?>
+                  <?php endif; ?>
                 </td>
                 <td>
-                  <a href="<?= base_url("pengembalian/{$item['id_peminjaman']}"); ?>" class="btn btn-success btn-sm" onclick="return confirm('Apakah benar buku ini dikembalikan?')">Kembalikan</a>
-                  <a href="#" class="btn btn-primary btn-sm btn-ubah-tenggat" data-toggle="modal" data-target="#tenggatModal" data-id="<?= $item['no_peminjaman']; ?>" data-tenggat="<?= $item['tanggal_tenggat']; ?>">Perpanjang</a>
-                  <form action="<?= base_url('send'); ?>" method="post">
-                    <input type="hidden" name="no_peminjaman" value="" id="modal-no-peminjaman">
-                    <div class="form-group">
-                      <!-- <label for="modal-pengingat" class="col-sm-2 control-label">Peminjam</label> -->
-                      <div class="col-sm-10">
-                        <input type="hidden" class="form-control" id="modal-pengingat" name="nama" placeholder="Masukkan Nama" value="<?= $item['nama'] ?>">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <!-- <label for="modal-pengingat" class="col-sm-2 control-label">Buku</label> -->
-                      <div class="col-sm-10">
-                        <input type="hidden" class="form-control" id="modal-pengingat" name="buku" placeholder="Masukkan Buku" value="<?= $item['judul'] ?>">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <!-- <label for="modal-pengingat" class="col-sm-2 control-label">Denda</label> -->
-                      <div class="col-sm-10">
-                        <input type="hidden" class="form-control" id="modal-pengingat" name="denda" placeholder="Masukkan Denda" value="Rp<?= time() > $tenggat ? number_format(floor((time() - $tenggat) / 60 / 60 / 24) * 500, 2, ",", ".") : '0'; ?>">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <!-- <label for="modal-pengingat" class="col-sm-2 control-label">Email</label> -->
-                      <div class="col-sm-10">
-                        <input type="hidden" class="form-control" id="modal-pengingat" name="email" placeholder="Masukkan Email" value="<?= $item['email'] ?>">
-                      </div>
-                    </div>
-
-
-                    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button> -->
-                    <button type="submit" class="btn btn-warning">Kirim</button>
-                  </form>
+									<?php if($item['status'] == 1): ?>
+										<a style="margin: 2px 0;" href="<?= base_url("pengembalian/{$item['id_peminjaman']}"); ?>" class="btn btn-success btn-sm" onclick="return confirm('Apakah benar buku ini dikembalikan?')">Kembalikan</a>
+										<a style="margin: 2px 0;" href="#" class="btn btn-primary btn-sm btn-ubah-tenggat" data-toggle="modal" data-target="#tenggatModal" data-id="<?= $item['no_peminjaman']; ?>" data-tenggat="<?= $item['tanggal_tenggat']; ?>">Perpanjang</a>
+										<form style="display: inline-block;" action="<?= base_url('send'); ?>" method="post">
+											<input type="hidden" name="no_peminjaman" value="<?= $item['no_peminjaman']; ?>">
+											<input type="hidden" name="nama" value="<?= $item['nama'] ?>">
+											<input type="hidden" name="buku" value="<?= $item['judul'] ?>">
+											<input type="hidden" name="denda" value="Rp<?= time() > $tenggat ? number_format(floor((time() - $tenggat) / 60 / 60 / 24) * 500, 2, ",", ".") : '0'; ?>">
+											<input type="hidden" name="email" value="<?= $item['email'] ?>">
+											<button style="margin: 2px 0;" type="submit" class="btn btn-sm btn-warning">Kirim Email</button>
+										</form>
+										<a style="margin: 2px 0;" href="<?= base_url("kehilangan/{$item['id_peminjaman']}") ?>" onclick="return confirm('Apakah Anda yakin ingin menandai buku ini hilang?')" class="btn btn-danger btn-sm">Hilang</a>
+									<?php endif; ?>
                 </td>
               </tr>
             <?php endforeach; ?>

@@ -83,6 +83,7 @@ $route['perpanjang'] = 'peminjaman/perpanjang';
 $route['ubah-pengajuan/(:num)/status/(:num)'] = 'peminjaman/process_book_application/$1/$2';
 $route['send'] = 'peminjaman/send';
 $route['pengembalian/(:num)'] = 'peminjaman/pengembalian/$1';
+$route['kehilangan/(:num)'] = 'peminjaman/kehilangan/$1';
 $route['pengeluaran'] = 'pengeluaran';
 
 $route['laporan-pengunjung'] = 'page/pengunjung';

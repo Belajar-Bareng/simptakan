@@ -85,6 +85,19 @@ class Peminjaman extends CI_Controller
         redirect('/peminjaman');
     }
 
+	public function kehilangan($id)
+	{
+		$detail = $this->detail->getDetail($id);
+		$book = $this->buku->get($detail['id_buku']);
+
+		$this->detail->update(['denda' => 50_000, 'status' => 0], $id);
+		$this->buku->update(['jumlah' => $book['jumlah']], $detail['id_buku']);
+
+		$message = 'Buku telah ditandai hilang ketika peminjaman!';
+		setMessage($message);
+		redirect('/peminjaman');
+	}
+
     public function perpanjang()
     {
         $no = $this->input->post('no_peminjaman');

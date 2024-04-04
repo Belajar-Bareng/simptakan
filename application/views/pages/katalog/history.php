@@ -45,15 +45,29 @@
                       <td><?= date('d/m/Y', $pinjam); ?></td>
                       <td><?= date('d/m/Y', $tenggat); ?></td>
                       <td><?= $item['tanggal_kembali'] ? date('d/m/Y', strtotime($item['tanggal_kembali'])) : '-'; ?></td>
-                      <td>Rp<?= $kembali > $tenggat ? number_format(floor(($kembali - $tenggat) / 60 / 60 / 24) * 500, 2, ",", ".") : '0'; ?></td>
-                      <td><?= $item['tanggal_kembali'] ? 'Dikembalikan' : 'Dipinjam'; ?></td>
+                      <td>
+												<?php if($item['status'] == 0): ?>
+													Rp50.000,00
+												<?php else: ?>
+													Rp<?= $kembali > $tenggat ? number_format(floor(($kembali - $tenggat) / 60 / 60 / 24) * 500, 2, ",", ".") : '0'; ?>
+												<?php endif; ?>
+											</td>
+                      <td>
+												<?php if ($item['status'] == 0): ?>
+														Buku Hilang
+												<?php else: ?>
+														<?= $item['tanggal_kembali'] ? 'Dikembalikan' : 'Dipinjam'; ?>
+												<?php endif; ?>
+											</td>
                       <td>
                         <?php
                         $tanggal_sekarang = new DateTime();
                         $tanggal_tenggat = new DateTime($item['tanggal_tenggat']);
                         $selisih_tanggal = $tanggal_sekarang->diff($tanggal_tenggat);
                         ?>
-                        <?php if ($tanggal_sekarang < $tanggal_tenggat) { ?>
+												<?php if ($item['status'] == 0) { ?>
+													-
+                        <?php } else if ($tanggal_sekarang < $tanggal_tenggat) { ?>
                           <div class="badge bg-red">Kembalikan <?php echo $selisih_tanggal->days + 1 ?> Hari Lagi</div>
                         <?php } else if (!empty($item['tanggal_kembali'])) { ?>
                           <div>-</div>
@@ -62,8 +76,10 @@
                         <?php } ?>
                       </td>
                       <td>
+												<?php if($item['status'] == 1): ?>
                         <a href="<?= base_url("bukti-pinjam-buku/{$item['id_peminjaman']}"); ?>" target="_blank" class="btn btn-primary btn-sm">Cetak</a>
                         <a href="#" class="btn btn-success btn-sm btn-ubah-tenggat" data-toggle="modal" data-target="#tenggatModal" data-id="<?= $item['no_peminjaman']; ?>" data-tenggat="<?= $item['tanggal_tenggat']; ?>">Perpanjang</a>
+												<?php endif ?>
                       </td>
                     </tr>
                   <?php endforeach; ?>
